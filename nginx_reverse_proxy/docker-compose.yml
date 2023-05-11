@@ -2,7 +2,8 @@ version: '3'
 services:
 
   nginx_reverse_proxy:
-    image: nginx:alpine
+    # image: nginx:alpine
+    build: .
     container_name: nginx_reverse_proxy
     restart: unless-stopped
     tty: true
@@ -13,7 +14,7 @@ services:
       - "443:443"
     volumes:
       - ./sites_available/:/etc/nginx/conf.d/
-      # - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
       # - /home/ubuntu/ssl:/ssl/
 
 networks:
