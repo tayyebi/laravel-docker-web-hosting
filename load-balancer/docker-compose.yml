@@ -1,0 +1,61 @@
+version: '3'
+services:
+  lb:
+    build: .
+    hostname: lb
+    container_name: lb
+    restart: unless-stopped
+    tty: true
+    networks:
+      - pub
+    ports:
+      - "80:80"
+      - "8080:8080"
+      # - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # - /home/ubuntu/ssl:/ssl/
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: redis
+    networks:
+      - pub
+
+  larashared:
+    build:
+      context: .
+      dockerfile: Dockerfile.laravel
+    image: php:8.2-cli
+    hostname: larashared
+    container_name: larashared
+    restart: always
+    tty: true
+    user: root
+    networks:
+      - pub
+    working_dir: '/app'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../larashared:/app
+    entrypoint: ["/app/prelaunch.sh"]
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    hostname: portainer
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - pub
+
+networks:
+  pub:
+    external: true
+
+volumes:
+  portainer_data:

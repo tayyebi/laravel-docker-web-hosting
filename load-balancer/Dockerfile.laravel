@@ -1,0 +1,44 @@
+FROM php:8.2-cli-alpine
+
+# Install necessary system packages and PHP extensions
+RUN apk add --no-cache \
+    bash \
+    redis \
+    sqlite \
+    sqlite-dev \
+    git \
+    curl \
+    unzip \
+    oniguruma-dev \
+    libzip-dev \
+    libpq-dev \
+    libxml2-dev \
+    icu-dev \
+    zlib-dev \
+    g++ \
+    make \
+    autoconf \
+    gcc \
+    libc-dev \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    pdo_sqlite \
+    pcntl \
+    mbstring \
+    bcmath \
+    zip \
+    intl \
+    opcache
+
+# Install Composer globally
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+
+# Add Docker CLI Support
+RUN apk add --no-cache docker-cli
+
+# Set working directory
+WORKDIR /app

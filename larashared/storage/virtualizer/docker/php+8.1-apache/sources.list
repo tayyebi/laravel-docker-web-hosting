@@ -1,0 +1,2 @@
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main 
+deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main 
