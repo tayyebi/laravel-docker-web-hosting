@@ -71,6 +71,65 @@ class PlanService
                     ]
                 ],
             ],
+        ],
+        [
+            'id' => 2,
+            'name' => 'WordPress 6.4',
+            'storage' => '10GB',
+            'containers' => [
+                [
+                    'imageName' => 'local/wordpress64',
+                    'hostname' => '{{stack}}',
+                    'cpu' => '0.2 cores',
+                    'ram' => '1GB',
+                    'networks' => ['pub', 'private_{{stack}}'],
+                    'volumes' => [
+                        '{{storage}}/user_{{userId}}/wordpress_{{websiteId}}/uploads' => '/app/wp-content/uploads'
+                    ]
+                ],
+                [
+                    'imageName' => 'local/mysql9',
+                    'hostname' => '{{stack}}-mysql',
+                    'cpu' => '0.2 cores',
+                    'ram' => '1GB',
+                    'variables' => [
+                        'MYSQL_DATABASE' => 'db',
+                        'MYSQL_ROOT_PASSWORD' => 'toor'
+                    ],
+                    'networks' => ['private_{{stack}}'],
+                    'volumes' => [
+                        '{{storage}}/user_{{userId}}/db_{{websiteId}}' => '/var/lib/mysql'
+                    ]
+                ],
+                [
+                    'imageName' => 'local/phpmyadmin',
+                    'hostname' => '{{stack}}-phpmyadmin',
+                    'cpu' => '0.1 cores',
+                    'ram' => '256MB',
+                    'networks' => ['pub','private_{{stack}}'],
+                    // 'dns' => ['127.0.0.11'],
+                    // 'ports' => [
+                    //     '8888' => '80'
+                    // ],
+                    'variables' => [
+                        'PMA_HOST' => '{{stack}}-mysql',
+                        'PMA_PORT' => '3306',
+                        'PHPMyAdmin_ALLOW_NO_HTTPS' => 'true',
+                        'PMA_ABSOLUTE_URI' => 'http://{{domain}}/phpmyadmin'
+                    ],
+                ],
+                [
+                    'imageName' => 'local/filebrowser',
+                    'hostname' => '{{stack}}-filebrowser',
+                    'cpu' => '0.2 cores',
+                    'ram' => '1GB',
+                    'user' => 'root',
+                    'networks' => ['pub','private_{{stack}}'],
+                    'volumes' => [
+                        '{{storage}}/user_{{userId}}/wordpress_{{websiteId}}' => '/var/www/html/repository'
+                    ]
+                ],
+            ],
         ]
     ];
 

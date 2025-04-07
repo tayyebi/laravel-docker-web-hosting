@@ -22,7 +22,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/websites');
+            return redirect()->route('wizard.domain');
         }
 
         return back()->withErrors([

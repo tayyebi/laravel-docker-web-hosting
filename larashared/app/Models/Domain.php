@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,16 @@ class Domain extends Model
 
     protected $fillable = [
         'address',
-        'user_id'
+        'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function website()
+    {
+        return $this->hasOne(Website::class, 'domain_id'); // Define the relationship
+    }
 }

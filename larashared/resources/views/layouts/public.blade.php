@@ -10,89 +10,119 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-        }
-
-        .sidebar {
+            background-color: #f5f7fa;
+            /* Light background for contrast */
             min-height: 100vh;
-            background-color: #343a40;
-            color: #fff;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
         }
 
-        .sidebar h4 {
+        .navbar {
+            background-color: #001f3f;
+            /* Navy blue */
+        }
+
+        .navbar .navbar-brand {
+            color: #ffffff;
+            /* White text for logo */
             font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
+            font-weight: bold;
         }
 
-        .sidebar .nav-link {
-            color: #adb5bd;
-            font-size: 1rem;
-            margin: 0.5rem 0;
-            transition: color 0.3s, background-color 0.3s;
+        .navbar .nav-link {
+            color: #bbd4ef;
+            /* Soft complementary blue */
+            transition: color 0.3s;
         }
 
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            color: #fff;
-            background-color: #495057;
-            border-radius: 4px;
+        .navbar .nav-link:hover {
+            color: #ffffff;
+            /* White text on hover */
         }
 
         .content {
             padding: 30px;
+            text-align: center;
+            flex-grow: 1;
+            /* Fills vertical space */
         }
 
         .content h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #495057;
+            color: #001f3f;
+            /* Navy blue heading */
         }
 
-        .content .card {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: none;
-            border-radius: 8px;
+        .card {
+            border: 1px solid #dde3ea;
+            /* Subtle border */
+            border-radius: 4px;
+            /* Reduced border radius */
+            background-color: #ffffff;
+            /* White card background */
+        }
+
+        footer {
+            background-color: #001f3f;
+            /* Navy blue footer */
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        footer a {
+            color: #bbd4ef;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #ffffff;
         }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-                <div class="position-sticky">
-                    <h4>{{ config('app.name') }}</h4>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">🏠 Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">🔓 Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}">🔒 Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">🔐 Register</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <!-- Main Content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 content">
-                <div class="card">
-                    <div class="card-body">
-                        @yield('content')
-                    </div>
-                </div>
-            </main>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">{{ config('app.name') }}</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    @if (Route::currentRouteName() === 'login')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">Register</a>
+                    </li>
+                    @elseif (Route::currentRouteName() === 'register')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    @elseif (Route::currentRouteName() === 'dashboard')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                    </li>
+                    @endif
+                </ul>
+            </div>
         </div>
-    </div>
-    <footer>Copyright © {{ date('Y') }}</footer>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="card">
+            <div class="card-body">
+                @yield('content')
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Footer -->
+    <footer>
+        Copyright © {{ date('Y') }} |
+        <a href="/privacy-policy">Privacy Policy</a>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
